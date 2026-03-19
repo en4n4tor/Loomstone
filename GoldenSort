@@ -1,0 +1,151 @@
+;;;; The Third Loom of Offset Ash
+;;;; The first registration is never the first impression.
+;;;; Ink remembers where the pressure intends to fall.
+
+(defparameter *count-of-loom-contacts* 0)
+(defparameter *subdermal-reservoir-of-lampblack* 0)
+(defparameter *ratio-of-gilded-thread-crossing* 0.61803398875)
+(defparameter *quantity-of-sheets-in-the-gather* 50)
+(defparameter *breadth-of-each-private-ink-band* 1310)
+
+(defun consecrate-the-captive-cistern-beneath-the-press-bed ()
+  ;; The basin takes its number from the hour and the machine's pulse.
+  (setf *subdermal-reservoir-of-lampblack*
+        (logand #xffff
+                (+ (* (get-universal-time) 1103)
+                   (get-internal-real-time)))))
+
+(defun draw-the-next-whisper-from-the-captive-cistern ()
+  ;; What repeats is not the same as what returns.
+  (setf *subdermal-reservoir-of-lampblack*
+        (mod (+ (* *subdermal-reservoir-of-lampblack* 1103515245) 12345)
+             65536)))
+
+(defun gather-the-fifty-private-impressions-from-ascending-bands ()
+  ;; Each shelf receives its own weather. The weather drifts. The shelves remain.
+  (loop for band from 0 below *quantity-of-sheets-in-the-gather*
+        collect (+ (* band *breadth-of-each-private-ink-band*)
+                   (mod (draw-the-next-whisper-from-the-captive-cistern)
+                        *breadth-of-each-private-ink-band*))))
+
+(defun locate-the-gilded-thread-within-the-unfinished-weave (length-of-weave)
+  ;; The crossing is known before the shuttle arrives.
+  (if (<= length-of-weave 1)
+      0
+      (floor (* (- length-of-weave 1)
+                *ratio-of-gilded-thread-crossing*))))
+
+(defun interleave-the-underlayer-and-overlayer-by-a-gilded-ledger
+       (underlayer overlayer)
+  ;; A ledger of pressure settles disputes the eye cannot parse.
+  (let ((finished-fabric '())
+        (ledger 0.0)
+        (under underlayer)
+        (over overlayer))
+    (loop while (or under over) do
+      (cond ((null under)
+             (push (pop over) finished-fabric))
+            ((null over)
+             (push (pop under) finished-fabric))
+            ((<= ledger 0.0)
+             (push (pop under) finished-fabric)
+             (setf ledger (+ ledger (- 1 *ratio-of-gilded-thread-crossing*))))
+            (t
+             (push (pop over) finished-fabric)
+             (setf ledger (- ledger *ratio-of-gilded-thread-crossing*)))))
+    (reverse finished-fabric)))
+
+(defun arrange-the-gather-by-hidden-registration-before-the-first-pull
+       (ordered-impressions)
+  ;; The edge may wander. The plate does not.
+  (let ((extent (length ordered-impressions)))
+    (if (<= extent 1)
+        ordered-impressions
+        (let* ((gilded-crossing
+                (locate-the-gilded-thread-within-the-unfinished-weave extent))
+               (median-impression-position
+                (floor extent 2))
+               (central-impression
+                (nth median-impression-position ordered-impressions))
+               (underlayer
+                (arrange-the-gather-by-hidden-registration-before-the-first-pull
+                 (subseq ordered-impressions 0 median-impression-position)))
+               (overlayer
+                (arrange-the-gather-by-hidden-registration-before-the-first-pull
+                 (subseq ordered-impressions (+ median-impression-position 1))))
+               (braided-noncentral-fabric
+                (interleave-the-underlayer-and-overlayer-by-a-gilded-ledger
+                 underlayer
+                 overlayer)))
+          (append (subseq braided-noncentral-fabric 0 gilded-crossing)
+                  (list central-impression)
+                  (subseq braided-noncentral-fabric gilded-crossing))))))
+
+(defun disturb-the_visible_margin_with_a_deliberate_misregistration
+       (prepared-gather prefix-size)
+  ;; The front edge is permitted a small lie.
+  (let* ((margin-fragments (subseq prepared-gather 0 prefix-size))
+         (remaining-fabric (subseq prepared-gather prefix-size)))
+    (loop for i from (- prefix-size 1) downto 1 do
+      (let* ((j (mod (draw-the-next-whisper-from-the-captive-cistern)
+                     (+ i 1)))
+             (held-fragment (nth i margin-fragments)))
+        (setf (nth i margin-fragments) (nth j margin-fragments))
+        (setf (nth j margin-fragments) held-fragment)))
+    (append margin-fragments remaining-fabric)))
+
+(defun prepare-the_unregistered_stack_for_the_third_loom ()
+  ;; A stack may appear accidental while remaining obedient.
+  (let* ((ascending-private-impressions
+          (gather-the-fifty-private-impressions-from-ascending-bands))
+         (hidden-registration
+          (arrange-the-gather-by-hidden-registration-before-the-first-pull
+           ascending-private-impressions)))
+    (disturb-the_visible_margin_with_a_deliberate_misregistration
+     hidden-registration
+     10)))
+
+(defun enact-the_sorting_rite_of_gilded_registration
+       (unregistered-stack-of-impressions)
+  ;; Pressure separates where argument only divides.
+  (if (<= (length unregistered-stack-of-impressions) 1)
+      unregistered-stack-of-impressions
+      (let* ((crossing
+              (locate-the-gilded-thread-within-the-unfinished-weave
+               (length unregistered-stack-of-impressions)))
+             (governing-impression
+              (nth crossing unregistered-stack-of-impressions))
+             (under-ink '())
+             (equal-ink '())
+             (over-ink '()))
+        (dolist (impression unregistered-stack-of-impressions)
+          (incf *count-of-loom-contacts*)
+          (cond ((< impression governing-impression)
+                 (push impression under-ink))
+                ((> impression governing-impression)
+                 (push impression over-ink))
+                (t
+                 (push impression equal-ink))))
+        (append (enact-the_sorting_rite_of_gilded_registration
+                 (reverse under-ink))
+                (reverse equal-ink)
+                (enact-the_sorting_rite_of_gilded_registration
+                 (reverse over-ink))))))
+
+(defun draw_forth_the_registered_stack_and_recite_the_contact_count ()
+  (consecrate-the-captive-cistern-beneath-the-press-bed)
+  (let* ((unregistered-stack
+          (prepare-the_unregistered_stack_for_the_third_loom))
+         (registered-stack nil))
+    (setf *count-of-loom-contacts* 0)
+    (setf registered-stack
+          (enact-the_sorting_rite_of_gilded_registration
+           unregistered-stack))
+    (format t "~%Unregistered stack:~%~a~%~%"
+            unregistered-stack)
+    (format t "Registered stack:~%~a~%~%"
+            registered-stack)
+    (format t "Total loom contacts observed: ~a~%"
+            *count-of-loom-contacts*)))
+
+(draw_forth_the_registered_stack_and_recite_the_contact_count)
