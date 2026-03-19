@@ -1,0 +1,47 @@
+;;;; Jason's Quicksort Assignment
+;;;; Common Lisp
+
+(defparameter *steps* 0)
+(defparameter *seed* 1727)
+
+(defun next-random ()
+  (setf *seed*
+        (mod (+ (* *seed* 1103515245) 12345)
+             65536)))
+
+(defun make-random-list (count)
+    (loop repeat count collect (next-random)))
+
+(defun quicksort (numbers)
+  "Sort NUMBERS from lowest to highest using quicksort."
+  (if (<= (length numbers) 1)
+      numbers
+      (let* ((pivot (first numbers))
+             (less '())
+             (equal '())
+             (greater '()))
+        
+        ;; Partition the list around the pivot
+        (dolist (n numbers)
+          (incf *steps*)
+          (cond ((< n pivot) (push n less))
+                ((> n pivot) (push n greater))
+                (t           (push n equal))))
+        
+        ;; Recursively sort sublists and combine results
+        (append (quicksort (reverse less))
+                (reverse equal)
+                (quicksort (reverse greater))))))
+
+(defun main ()
+  (let* ((values (make-random-list 50))
+         (sorted-values nil))
+    
+    (setf *steps* 0)
+    (setf sorted-values (quicksort values))
+    
+    (format t "~%Original list:~%~a~%~%" values)
+    (format t "Sorted list:~%~a~%~%" sorted-values)
+    (format t "Total quicksort steps: ~a~%" *steps*)))
+
+(main)
